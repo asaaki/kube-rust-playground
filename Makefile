@@ -25,18 +25,10 @@ K3D_CLUSTER_CREATE_FLAGS = \
 	--api-port=6550 \
 	--publish $(K3D_PUBLIC_HTTP_PORT):80 \
 	--workers 2
-# --enable-registry-cache; not compatible with local registry
 
 K3D_CLUSTER_DELETE_FLAGS = \
 	$(K3D_CLUSTER_FLAGS) \
 	--prune
-#	--keep-registry-volume - nope; fresh registry each time, please
-
-# or own local registry via docker:
-# docker volume create local_registry
-# docker container run -d \
-#   --name localhost -v local_registry:/var/lib/registry \
-#   --restart always -p 5000:5000 registry:2
 
 DOCKER_NETWORK = k3d-$(NAME)
 
