@@ -1,0 +1,7 @@
+#!/bin/sh
+config_path=$(make get-kubeconfig 2>/dev/null)
+if [ $? -eq 0 ]; then
+    KUBECONFIG=$(make get-kubeconfig) $ORIGINAL_KUBECTL $@
+else
+    echo "Please start the cluster first: make cluster"
+fi
