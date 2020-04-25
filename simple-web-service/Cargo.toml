@@ -1,6 +1,6 @@
 [package]
 name = "simple-web-service"
-version = "0.1.0"
+version = "1.0.0"
 authors = ["Christoph Grabo <asaaki@mannaz.cc>"]
 edition = "2018"
 

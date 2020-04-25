@@ -1,3 +1,4 @@
+# separate file so we can add more services over time
 apiVersion: networking.k8s.io/v1beta1
 kind: Ingress
 metadata:
@@ -5,17 +6,11 @@ metadata:
   annotations:
     ingress.kubernetes.io/ssl-redirect: "false"
     kubernetes.io/ingress.class: "traefik"
-    # traefik.frontend.rule.type: PathPrefixStrip
-    # traefik.frontend.passHostHeader: "false"
 spec:
   rules:
   - http:
       paths:
-      - path: /main
+      - path: /
         backend:
           serviceName: simple-web-service
           servicePort: 80
-      # - path: /nginx
-      #   backend:
-      #     serviceName: nginx
-      #     servicePort: 80

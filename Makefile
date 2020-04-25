@@ -34,22 +34,13 @@ registry-test:
 	docker tag $(REGISTRY_TEST_IMAGE):latest $(K3D_REGISTRY)/$(REGISTRY_TEST_IMAGE):latest
 	docker push $(K3D_REGISTRY)/$(REGISTRY_TEST_IMAGE):latest
 
-# https://github.com/rancher/k3d/blob/master/docs/examples.md#expose-services
-create-ingress:
-	docker pull nginx:latest
-	docker tag nginx:latest $(K3D_REGISTRY)/nginx:latest
-	docker push $(K3D_REGISTRY)/nginx:latest
-	kubectl create deployment nginx --image=$(K3D_REGISTRY)/nginx:latest
-	kubectl create service clusterip nginx --tcp=80:80
-	kubectl apply -f k3d-data/ingress.yml
-	@echo "Should be reachable on port $(K3D_PUBLIC_HTTP_PORT) now,"
-	@echo "Try: curl http://localhost:$(K3D_PUBLIC_HTTP_PORT)/"
-
 create-$(SWS_IMAGE_NAME):
 	cd $(SWS_IMAGE_NAME) && $(MAKE) image
 	kubectl apply -f k3d-data/$(SWS_IMAGE_NAME).yml
+	kubectl apply -f k3d-data/ingress.yml
 
 delete-$(SWS_IMAGE_NAME):
+	kubectl delete -f k3d-data/ingress.yml
 	kubectl delete -f k3d-data/$(SWS_IMAGE_NAME).yml
 
 # https://octant.dev/
