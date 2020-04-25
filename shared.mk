@@ -1,0 +1,33 @@
+NAME = kube-rust-playground
+
+K3S_IMAGE = docker.io/rancher/k3s:v1.17.4-k3s1
+# OR: docker.io/rancher/k3s:v1.18.2-rc2-k3s1-amd64
+# OR: docker.io/rancher/k3s:latest
+# check for other candidates:
+# https://hub.docker.com/r/rancher/k3s/tags?page=1&ordering=last_updated
+
+K3D_REGISTRY_NAME = registry.localhost
+K3D_REGISTRY_PORT = 5000
+K3D_REGISTRY = $(K3D_REGISTRY_NAME):$(K3D_REGISTRY_PORT)
+
+K3D_CLUSTER_FLAGS = --name=$(NAME)
+
+K3D_PUBLIC_HTTP_PORT = 18080
+
+DOCKER_NETWORK = k3d-$(NAME)
+
+DC = docker-compose
+DC_RUN = $(DC) run --rm
+DC_UP = $(DC) up -d
+
+DOCKER_BUILDKIT ?= 1
+BK_BUILD = docker build --progress=plain -f Dockerfile
+
+REGISTRY_TEST_IMAGE = busybox
+
+SWS_IMAGE_NAME = simple-web-service
+SWS_IMAGE_REPO = $(K3D_REGISTRY)/$(SWS_IMAGE_NAME)
+SWS_IMAGE_VER  = 1.0.2
+SWS_IMAGE_SIMPE = $(SWS_IMAGE_NAME):$(SWS_IMAGE_VER)
+SWS_IMAGE_FULL = $(SWS_IMAGE_REPO):$(SWS_IMAGE_VER)
+SWS_IMAGE_PORT = 8080
