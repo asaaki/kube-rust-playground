@@ -34,6 +34,9 @@ registry-test:
 	docker tag $(REGISTRY_TEST_IMAGE):latest $(K3D_REGISTRY)/$(REGISTRY_TEST_IMAGE):latest
 	docker push $(K3D_REGISTRY)/$(REGISTRY_TEST_IMAGE):latest
 
+create-psp:
+	kubectl apply -f k3d-data/psp.yml
+
 create-$(SWS_IMAGE_NAME):
 	cd $(SWS_IMAGE_NAME) && $(MAKE) image
 	kubectl apply -f k3d-data/$(SWS_IMAGE_NAME).yml

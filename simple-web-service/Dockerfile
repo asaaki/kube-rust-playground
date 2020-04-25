@@ -51,7 +51,7 @@ RUN \
  && rustup target add x86_64-unknown-linux-musl \
   \
  && wget -O upx.tar.xz https://github.com/upx/upx/releases/download/v3.96/upx-3.96-amd64_linux.tar.xz \
- && tar -xf upx.tar.xz --directory /bin --strip-components=1 $(tar -tf upx.tar.xz | egrep 'upx$') \
+ && tar -xf upx.tar.xz --directory /bin --strip-components=1 $(tar -tf upx.tar.xz | grep -E 'upx$') \
  && rm -f upx.tar.xz \
   \
  && rustup --version \
@@ -124,8 +124,8 @@ CMD ["/bin/sh"]
 
 FROM base as run
 RUN addgroup -g 1001 appuser \
- && adduser  -u 1001 -G appuser -h /app -D appuser
-USER appuser
+ && adduser  -u 1001 -G appuser -H -D appuser
+USER 1001
 ENV PATH "/app:${PATH}"
 
 #######################
