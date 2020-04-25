@@ -47,3 +47,10 @@ delete-$(SWS_IMAGE_NAME):
 # brew install octant
 octant:
 	KUBECONFIG=$(shell k3d get-kubeconfig --name=$(NAME)) octant
+
+request:
+	curl http://localhost:$(K3D_PUBLIC_HTTP_PORT)/hello
+
+# wrk2
+perftest:
+	wrk $(WRK_SETTINGS) http://localhost:$(K3D_PUBLIC_HTTP_PORT)/hello

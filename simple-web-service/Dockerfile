@@ -7,8 +7,8 @@
 ## global args
 ARG APP_NAME=simple-web-service
 ARG BUILD_MODE=release
-ARG STRIP=0
-ARG COMPRESS=0
+ARG STRIP=1
+ARG COMPRESS=1
 
 #########################
 ##### builder layer #####

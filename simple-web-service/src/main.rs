@@ -37,6 +37,7 @@ async fn handler(req: Request<()>) -> TideResult {
             <pre>{:#?}</pre>
         </body>
         </html>
+        <!-- end -->
         "#,
         &req
     );
@@ -49,7 +50,8 @@ async fn handler(req: Request<()>) -> TideResult {
 #[async_std::main]
 async fn main() -> Result<(), Error> {
     let mut app = tide::new();
-    app.at("/*").get(handler);
+    app.at("/").get(handler);
+    app.at("*").all(handler);
     println!("Runs at: {}", addr());
     app.listen(addr()).await?;
     Ok(())
