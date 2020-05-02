@@ -24,7 +24,7 @@ cluster:
 	@echo "Waiting a bit (5sec) ..."
 	@sleep 5
 	@echo
-	@kubectl cluster-info
+	@$(KUBECTL) cluster-info
 
 clean-cluster:
 	k3d delete $(K3D_CLUSTER_DELETE_FLAGS)
@@ -35,16 +35,16 @@ registry-test:
 	docker push $(K3D_REGISTRY)/$(REGISTRY_TEST_IMAGE):latest
 
 create-psp:
-	kubectl apply -f k3d-data/psp.yml
+	$(KUBECTL) apply -f k3d-data/psp.yml
 
 create-$(SWS_IMAGE_NAME):
 	cd $(SWS_IMAGE_NAME) && $(MAKE) image
-	kubectl apply -f k3d-data/$(SWS_IMAGE_NAME).yml
-	kubectl apply -f k3d-data/ingress.yml
+	$(KUBECTL) apply -f k3d-data/$(SWS_IMAGE_NAME).yml
+	$(KUBECTL) apply -f k3d-data/ingress.yml
 
 delete-$(SWS_IMAGE_NAME):
-	kubectl delete -f k3d-data/ingress.yml
-	kubectl delete -f k3d-data/$(SWS_IMAGE_NAME).yml
+	$(KUBECTL) delete -f k3d-data/ingress.yml
+	$(KUBECTL) delete -f k3d-data/$(SWS_IMAGE_NAME).yml
 
 # https://octant.dev/
 # brew install octant

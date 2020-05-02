@@ -1,7 +1,7 @@
 #!/bin/sh
-config_path=$(make get-kubeconfig 2>/dev/null)
+config_path=$(make -s get-kubeconfig 2>/dev/null)
 if [ $? -eq 0 ]; then
-    KUBECONFIG=$(make get-kubeconfig) $@
+    $1 --kubeconfig $config_path ${@:2}
 else
     echo "Please start the cluster first: make cluster"
 fi

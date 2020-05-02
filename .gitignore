@@ -3,3 +3,5 @@
 **/*.old.rs
 **/*.rs.bk
 **/target
+/.envrc.dev
+Cargo.lock

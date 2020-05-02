@@ -14,6 +14,8 @@ K3D_CLUSTER_FLAGS = --name=$(NAME)
 
 K3D_PUBLIC_HTTP_PORT = 18080
 
+KUBECTL = bin/kubectl
+
 DOCKER_NETWORK = k3d-$(NAME)
 
 DC = docker-compose
