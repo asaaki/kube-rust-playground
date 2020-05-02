@@ -1,4 +1,4 @@
-# syntax=docker/dockerfile:experimental
+# syntax=docker/dockerfile:1.1.7-experimental
 
 # FUTURE: with buildkit support (currently experimental in Docker since 18.06) and
 # https://github.com/moby/buildkit/blob/master/frontend/dockerfile/docs/experimental.md

@@ -17,28 +17,32 @@ K3D_CLUSTER_DELETE_FLAGS = \
 	--prune
 
 get-kubeconfig:
-	@k3d get-kubeconfig --name=$(NAME)
+	@$(K3D) get-kubeconfig --name=$(NAME)
 
 cluster:
-	k3d create $(K3D_CLUSTER_CREATE_FLAGS)
+	$(K3D) create $(K3D_CLUSTER_CREATE_FLAGS)
 	@echo "Waiting a bit (5sec) ..."
 	@sleep 5
 	@echo
 	@$(KUBECTL) cluster-info
 
 clean-cluster:
-	k3d delete $(K3D_CLUSTER_DELETE_FLAGS)
+	$(K3D) delete $(K3D_CLUSTER_DELETE_FLAGS)
 
 registry-test:
-	docker pull $(REGISTRY_TEST_IMAGE):latest
-	docker tag $(REGISTRY_TEST_IMAGE):latest $(K3D_REGISTRY)/$(REGISTRY_TEST_IMAGE):latest
-	docker push $(K3D_REGISTRY)/$(REGISTRY_TEST_IMAGE):latest
+	$(DOCKER) pull $(REGISTRY_TEST_IMAGE):latest
+	$(DOCKER) tag $(REGISTRY_TEST_IMAGE):latest $(K3D_REGISTRY)/$(REGISTRY_TEST_IMAGE):latest
+	$(DOCKER) push $(K3D_REGISTRY)/$(REGISTRY_TEST_IMAGE):latest
 
 create-psp:
 	$(KUBECTL) apply -f k3d-data/psp.yml
 
+build-image-$(SWS_IMAGE_NAME):
+	$(MAKE) -C $(SWS_IMAGE_NAME) image
+	$(DOCKER) images $(K3D_REGISTRY)/*
+
 create-$(SWS_IMAGE_NAME):
-	cd $(SWS_IMAGE_NAME) && $(MAKE) image-push
+	$(MAKE) -C $(SWS_IMAGE_NAME) image-push
 	$(KUBECTL) apply -f k3d-data/$(SWS_IMAGE_NAME).yml
 	$(KUBECTL) apply -f k3d-data/ingress.yml
 
