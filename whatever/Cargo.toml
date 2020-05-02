@@ -1,0 +1,33 @@
+[package]
+name = "whatever"
+version = "0.1.0"
+authors = ["Christoph Grabo <asaaki@mannaz.cc>"]
+edition = "2018"
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[dependencies]
+serde = { version = "1.0", features = ["derive"]}
+serde_json = "1.0"
+concread = "*"
+sharded-slab = "0.0.9"
+simple-symbol = "3.0"
+arc-swap = "0.4"
+dashmap = "3.11"
+bus_queue = "0.5"
+evmap = "9.0"
+coercible_errors = "0.1"
+roperator = "0.2"
+kube = "0.33"
+k8s-openapi = { version = "0.7", features = ["v1_17"] }
+shiplift = "0.6"
+#dockworker = "0.0.18"
+boondock = "0.1.0-alpha.1"
+bollard = "0.5"
+dockinfo = "1.0"
+dockerfile-parser = "0.2"
+lapin = "1.0.0-beta3"
+amiquip = "0.3"
+async-trait = "0.1"
+futures = "0.3"
+futures-util = "0.3"
