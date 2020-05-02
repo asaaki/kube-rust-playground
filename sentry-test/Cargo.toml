@@ -1,0 +1,27 @@
+[package]
+name = "sentry-test"
+version = "0.1.1"
+authors = ["Christoph Grabo <asaaki@mannaz.cc>"]
+edition = "2018"
+default-run = "sentry-test"
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[[bin]]
+name = "sentry-test"
+path = "src/main.rs"
+
+[[bin]]
+name = "statsd"
+path = "src/statsd_server_mock.rs"
+
+[[bin]]
+name = "prom"
+path = "src/prom_pg_mock.rs"
+
+[dependencies]
+async-std = { version = "1.5", features = ["attributes"] }
+tide = "0.8"
+lazy_static = "1.4"
+dipstick = "0.7"
+sentry = { version = "0.18", features = ["with_rustls", "with_curl_transport"] }
+serde_json = "1.0"
