@@ -38,7 +38,7 @@ create-psp:
 	$(KUBECTL) apply -f k3d-data/psp.yml
 
 create-$(SWS_IMAGE_NAME):
-	cd $(SWS_IMAGE_NAME) && $(MAKE) image
+	cd $(SWS_IMAGE_NAME) && $(MAKE) image-push
 	$(KUBECTL) apply -f k3d-data/$(SWS_IMAGE_NAME).yml
 	$(KUBECTL) apply -f k3d-data/ingress.yml
 

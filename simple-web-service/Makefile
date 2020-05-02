@@ -5,4 +5,6 @@ build:
 
 image:
 	$(BK_BUILD) -t $(SWS_IMAGE_FULL) --squash .
+
+image-push: image
 	docker push $(SWS_IMAGE_FULL)

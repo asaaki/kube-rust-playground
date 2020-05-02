@@ -7,44 +7,57 @@
 ## global args
 ARG APP_NAME=simple-web-service
 ARG BUILD_MODE=release
-
-# use it only if you really need to squeeze the bytes
-# note: alpine base already comes with ~5.61 MB (alpine 3.11)
-ARG STRIP=0
-ARG COMPRESS=0
+ARG STRIP=1
+ARG COMPRESS=1
 
 #########################
 ##### builder layer #####
 #########################
 
-FROM rust:1.43-slim-buster as builder
+# use specific hash to force correct platform (otherwise docker seems to choose randomly?);
+# nope, the flag --platform=linux/amd64 was not helping!
+FROM debian:buster-slim@sha256:1ceec96ca567c40500a2745728f7c19c0801785c8b10187b1d66bcd538694fc2 as builder
 
-ENV BUILD_CACHE_BUSTER="2020-05-02T00:00:00"
-ENV DEB_PACKAGES="ca-certificates curl file gcc-multilib git libssl-dev make musl-tools patch pkg-config wget xz-utils"
+ENV DEBIAN_FRONTEND=noninteractive
+
+ENV BUILD_CACHE_BUSTER="2020-04-25T00:00:00"
+
+ENV RUSTUP_HOME=/usr/local/rustup \
+  CARGO_HOME=/usr/local/cargo \
+  PATH=/usr/local/cargo/bin:$PATH
+
+ENV RUSTUP_INIT_URL="https://static.rust-lang.org/rustup/dist/x86_64-unknown-linux-gnu/rustup-init" \
+  RUST_TOOLCHAIN="stable" \
+  DEB_PACKAGES="ca-certificates curl wget file patch make git xz-utils gcc-multilib musl-tools"
 
 # @see https://github.com/moby/buildkit/blob/master/frontend/dockerfile/docs/experimental.md#example-cache-apt-packages
-RUN rm -f /etc/apt/apt.conf.d/docker-clean \
- && echo 'Binary::apt::APT::Keep-Downloaded-Packages "true";' > /etc/apt/apt.conf.d/keep-cache
-
 RUN \
   --mount=type=cache,target=/var/cache/apt \
   --mount=type=cache,target=/var/lib/apt \
-    echo "===== Build environment =====" \
- && uname -a \
- && echo "===== Dependencies =====" \
+    set -eux; \
+    uname -a; \
+    rm -f /etc/apt/apt.conf.d/docker-clean; \
+    echo 'Binary::apt::APT::Keep-Downloaded-Packages "true";' > /etc/apt/apt.conf.d/keep-cache; \
+    \
+    echo "Builder starts ..." \
  && apt-get update \
  && apt-get install -y --no-install-recommends $DEB_PACKAGES \
- && echo "===== Rust target: musl =====" \
+  \
+ && wget $RUSTUP_INIT_URL \
+ && chmod +x rustup-init \
+ && ./rustup-init -y --no-modify-path --default-toolchain $RUST_TOOLCHAIN \
+ && rm -f ./rustup-init \
+ && chmod -R a+w $RUSTUP_HOME $CARGO_HOME \
  && rustup target add x86_64-unknown-linux-musl \
- && echo "===== UPX =====" \
+  \
  && wget -O upx.tar.xz https://github.com/upx/upx/releases/download/v3.96/upx-3.96-amd64_linux.tar.xz \
  && tar -xf upx.tar.xz --directory /bin --strip-components=1 $(tar -tf upx.tar.xz | grep -E 'upx$') \
  && rm -f upx.tar.xz \
- && echo "===== Toolchain =====" \
+  \
  && rustup --version \
  && cargo --version \
  && rustc --version \
- && echo "Rust builder image done."
+ && echo Rust builder image done.
 
 #######################
 ##### build layer #####
@@ -66,14 +79,11 @@ WORKDIR /app
 COPY .cargo /app/.cargo
 COPY Cargo.* /app/
 
-# ENV RUSTFLAGS="-C target-feature=-crt-static" 
-
 RUN \
   --mount=type=cache,target=/usr/local/cargo/registry \
   --mount=type=cache,target=/app/target \
   cargo fetch \
-  && cargo build --${BUILD_MODE} \
-  # && cargo build --${BUILD_MODE} --target=x86_64-unknown-linux-musl \
+  && cargo build --${BUILD_MODE} --target=x86_64-unknown-linux-musl \
   && rm -rf /app/src
 
 COPY build.rs /app/
@@ -111,9 +121,6 @@ CMD ["/bin/sh"]
 ####################
 ##### run layer ####
 ####################
-
-# This is why we do not want to use 'FROM scratch',
-# otherwise the user within the container would be still root
 
 FROM base as run
 RUN addgroup -g 1001 appuser \
