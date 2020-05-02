@@ -9,3 +9,4 @@ edition = "2018"
 [dependencies]
 tide = "0.8"
 async-std = { version = "1.5", features = ["attributes"] }
+femme = "1.3"

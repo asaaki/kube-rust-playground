@@ -49,6 +49,9 @@ async fn handler(req: Request<()>) -> TideResult {
 
 #[async_std::main]
 async fn main() -> Result<(), Error> {
+    femme::clean::Logger::new()
+        .start(tide::log::Level::Info.to_level_filter())
+        .expect("logger issue");
     let mut app = tide::new();
     app.at("/").get(handler);
     app.at("*").all(handler);
