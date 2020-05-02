@@ -1,4 +1,7 @@
 [workspace]
 members = [
     "simple-web-service",
+    "multiport",
+    "sentry-test",
+    "whatever",
 ]
