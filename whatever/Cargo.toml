@@ -18,7 +18,7 @@ bus_queue = "0.5"
 evmap = "9.0"
 coercible_errors = "0.1"
 roperator = "0.2"
-kube = "0.33"
+kube = "0.34"
 k8s-openapi = { version = "0.7", features = ["v1_17"] }
 shiplift = "0.6"
 #dockworker = "0.0.18"
