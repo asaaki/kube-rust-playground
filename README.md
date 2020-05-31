@@ -38,3 +38,10 @@ make clean-cluster
 * <https://github.com/pacman82/throttle/blob/master/src/favicon.rs>
 * <https://github.com/async-rs/async-std/pull/733/files#diff-a8556a073aa4f101599aca791fd46accR15-R23>
 * <https://play.rust-lang.org/?version=stable&mode=debug&edition=2018&gist=8004f1ac04b47c6db4ad12af74782a06>
+* as gist: <https://gist.github.com/asaaki/6338893ffc921b461726a7660a6e11cf6>
+* <https://github.com/open-telemetry/opentelemetry-rust>
+* <https://github.com/jtescher/tracing-opentelemetry>
+* <https://github.com/tokio-rs/tracing>
+* <https://github.com/slack-rs/slack-rs>
+* <https://github.com/clux/rust-slack>
+* <https://github.com/mozilla/sccache/>
