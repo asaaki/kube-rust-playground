@@ -1,7 +1,21 @@
 #![forbid(unsafe_code)]
-//#![deny(warnings)]
+#![warn(rust_2018_idioms)]
+#![deny(warnings)]
+#![deny(clippy::cargo)]
+// workspace might have projects naturally depending on different versions:
+#![allow(clippy::multiple_crate_versions)]
+// we're not going to release a crate anyway:
+#![allow(clippy::cargo_common_metadata)]
+#![deny(clippy::pedantic)]
+#![deny(clippy::result_unwrap_used)]
+// purposefully used in this example, so we cannot enable this:
+// #![deny(clippy::panic)]
 
-use dipstick::*;
+// use dipstick::*;
+use dipstick::{
+    metrics, AppLabel, AtomicBucket, Counter, Gauge, InputScope, Marker, MultiInput, Prefixed,
+    Prometheus, Proxy, ScheduleFlush, Statsd, Stream, ThreadLabel, Timer,
+};
 use lazy_static::lazy_static;
 use sentry::capture_message;
 
@@ -70,7 +84,7 @@ fn sentry_options() -> sentry::ClientOptions {
         release: Some(APP_RELEASE.into()),
         environment: Some(sentry_environment().into()),
         // debug: true,
-        ..Default::default()
+        ..sentry::ClientOptions::default()
     }
 }
 
@@ -123,7 +137,7 @@ fn configure_dipstick() {
     AppLabel::set("test-app-label", "value-app");
 }
 
-/// Only if the STATSD_HOST is present we return a complete URI
+/// Only if the `STATSD_HOST` is present we return a complete URI
 fn statsd_uri() -> Option<String> {
     match (statsd_host(), statsd_port()) {
         (Some(host), port) => Some(format!("{}:{}", host, port)),
