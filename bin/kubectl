@@ -1,2 +1,2 @@
 #!/bin/sh
-with-k3d $ORIGINAL_KUBECTL $@
+with-k3d $ORIGINAL_KUBECTL "$@"
