@@ -1,7 +1,13 @@
 NAME = kube-rust-playground
 
-K3S_IMAGE = docker.io/rancher/k3s:v1.17.4-k3s1
-# OR: docker.io/rancher/k3s:v1.18.2-rc2-k3s1-amd64
+# k3d:
+# curl -s https://raw.githubusercontent.com/rancher/k3d/master/install.sh | TAG=v3.0.0-beta.1 bash
+
+# kubebox
+# curl -Lo ~/bin/kubebox https://github.com/astefanutti/kubebox/releases/download/v0.8.0/kubebox-linux && chmod +x ~/bin/kubebox
+
+# K3S_IMAGE = docker.io/rancher/k3s:v1.17.5-k3s1
+K3S_IMAGE = docker.io/rancher/k3s:v1.18.2-k3s1
 # OR: docker.io/rancher/k3s:latest
 # check for other candidates:
 # https://hub.docker.com/r/rancher/k3s/tags?page=1&ordering=last_updated
@@ -10,7 +16,7 @@ K3D = k3d
 K3D_REGISTRY_NAME = registry.localhost
 K3D_REGISTRY_PORT = 5000
 K3D_REGISTRY = $(K3D_REGISTRY_NAME):$(K3D_REGISTRY_PORT)
-K3D_CLUSTER_FLAGS = --name=$(NAME)
+K3D_CLUSTER_FLAGS = --name $(NAME)
 K3D_PUBLIC_HTTP_PORT = 18080
 
 DOCKER = docker

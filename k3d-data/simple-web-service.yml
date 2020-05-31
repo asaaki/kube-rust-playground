@@ -1,6 +1,30 @@
+apiVersion: networking.k8s.io/v1beta1
+kind: Ingress
+metadata:
+  namespace: simple-ns-1
+  name: sws-ingress
+  annotations:
+    ingress.kubernetes.io/ssl-redirect: "false"
+    kubernetes.io/ingress.class: traefik
+    # https://docs.traefik.io/v1.7/configuration/backends/kubernetes/
+    traefik.ingress.kubernetes.io/frontend-entry-points: http
+    # traefik.ingress.kubernetes.io/rule-type: PathPrefixStrip
+    ingress.kubernetes.io/custom-request-headers: x-req-from:k3s-traefix
+    ingress.kubernetes.io/custom-response-headers: x-lang:rust
+spec:
+  rules:
+  - http:
+      paths:
+      - path: /
+        backend:
+          serviceName: simple-web-service
+          servicePort: 80
+
+---
 apiVersion: v1
 kind: Service
 metadata:
+  namespace: simple-ns-1
   name: simple-web-service
   labels:
     run: simple-web-service
@@ -12,20 +36,24 @@ spec:
       targetPort: 8080
   selector:
     run: simple-web-service
+
 ---
 apiVersion: apps/v1
 kind: Deployment
 metadata:
+  namespace: simple-ns-1
   name: simple-web-service
 spec:
   selector:
     matchLabels:
       run: simple-web-service
-  replicas: 2
+  replicas: 5
   template:
     metadata:
       labels:
         run: simple-web-service
+      annotations:
+        k8s.markentier.tech/test: "a dummy annotation"
     spec:
       securityContext:
         runAsUser: 1001
@@ -43,3 +71,22 @@ spec:
               value: "8080"
           securityContext:
             allowPrivilegeEscalation: false
+          resources:
+            requests:
+              cpu: 100m
+              memory: 64Mi
+            limits:
+              cpu: 150m
+              memory: 128Mi
+          # readinessProbe:
+          #   initialDelaySeconds: 2
+          #   httpGet:
+          #     port: http
+          #     path: /ready
+          #   timeoutSeconds: 5
+          # livenessProbe:
+          #   initialDelaySeconds: 2
+          #   httpGet:
+          #     port: http
+          #     path: /health
+          #   timeoutSeconds: 5
