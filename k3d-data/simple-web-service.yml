@@ -33,7 +33,7 @@ spec:
         fsGroup: 2002
       containers:
         - name: simple-web-service
-          image: registry.localhost:5000/simple-web-service:1.0.0
+          image: __SWS_IMAGE_FULL__
           imagePullPolicy: Always
           ports:
             - name: http

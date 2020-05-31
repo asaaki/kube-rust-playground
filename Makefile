@@ -43,7 +43,7 @@ build-image-$(SWS_IMAGE_NAME):
 
 create-$(SWS_IMAGE_NAME):
 	$(MAKE) -C $(SWS_IMAGE_NAME) image-push
-	$(KUBECTL) apply -f k3d-data/$(SWS_IMAGE_NAME).yml
+	sed 's!__SWS_IMAGE_FULL__!$(SWS_IMAGE_FULL)!g' k3d-data/$(SWS_IMAGE_NAME).yml | $(KUBECTL) apply -f -
 	$(KUBECTL) apply -f k3d-data/ingress.yml
 
 delete-$(SWS_IMAGE_NAME):
