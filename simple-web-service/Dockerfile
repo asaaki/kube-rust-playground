@@ -133,7 +133,8 @@ ARG DEFAULT_PORT=8080
 LABEL tech.markentier.service.name="${APP_NAME}" \
       tech.markentier.service.repository="https://github.com/asaaki/kube-rust-playground"
 
-ENV HOST=0.0.0.0 PORT=${DEFAULT_PORT}
+ENV HOST_IP=0.0.0.0 \
+    PORT=${DEFAULT_PORT}
 
 COPY --from=build --chown=appuser:appuser /app/${APP_NAME} /app
 COPY --from=build --chown=appuser:appuser /run-app /

@@ -9,15 +9,15 @@ use std::{env, io::Error, net::SocketAddr};
 use tide::{Request, Response, Result as TideResult, StatusCode};
 
 static DEFAULT_PORT: &str = "8080";
-static DEFAULT_HOST: &str = "127.0.0.1";
+static DEFAULT_IP: &str = "127.0.0.1";
 
 fn addr() -> SocketAddr {
-    format!("{}:{}", host(), port())
+    format!("{}:{}", host_ip(), port())
         .parse()
-        .expect("HOST:PORT does not form a valid address")
+        .expect("HOST_IP:PORT does not form a valid address")
 }
-fn host() -> String {
-    var("HOST").unwrap_or_else(|_| DEFAULT_HOST.into())
+fn host_ip() -> String {
+    var("HOST_IP").unwrap_or_else(|_| DEFAULT_IP.into())
 }
 fn port() -> String {
     var("PORT").unwrap_or_else(|_| DEFAULT_PORT.into())
@@ -42,9 +42,8 @@ async fn handler(req: Request<()>) -> TideResult {
         "#,
         &req
     );
-    let resp = Response::new(StatusCode::Ok)
-        .body_string(body)
-        .set_mime(mime::TEXT_HTML_UTF_8);
+    let mut resp = Response::new(StatusCode::Ok).set_mime(mime::TEXT_HTML_UTF_8);
+    resp.set_body(body);
     Ok(resp)
 }
 
