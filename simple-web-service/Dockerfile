@@ -20,7 +20,7 @@ ARG COMPRESS=0
 FROM rust:1.43-slim-buster as builder
 
 ENV BUILD_CACHE_BUSTER="2020-05-02T00:00:00"
-ENV DEB_PACKAGES="ca-certificates curl file gcc-multilib git libssl-dev make musl-tools patch pkg-config wget xz-utils"
+ENV DEB_PACKAGES="ca-certificates cmake curl file g++ gcc gcc-multilib git libssl-dev linux-headers-amd64 make musl-tools patch pkg-config wget xz-utils"
 
 # @see https://github.com/moby/buildkit/blob/master/frontend/dockerfile/docs/experimental.md#example-cache-apt-packages
 RUN rm -f /etc/apt/apt.conf.d/docker-clean \
@@ -34,6 +34,7 @@ RUN \
  && echo "===== Dependencies =====" \
  && apt-get update \
  && apt-get install -y --no-install-recommends $DEB_PACKAGES \
+ && ln -s /usr/bin/musl-gcc /usr/bin/musl-g++ \
  && echo "===== Rust target: musl =====" \
  && rustup target add x86_64-unknown-linux-musl \
  && echo "===== UPX =====" \
@@ -72,8 +73,7 @@ RUN \
   --mount=type=cache,target=/usr/local/cargo/registry \
   --mount=type=cache,target=/app/target \
   cargo fetch \
-  && cargo build --${BUILD_MODE} \
-  # && cargo build --${BUILD_MODE} --target=x86_64-unknown-linux-musl \
+  && cargo build --${BUILD_MODE} --target=x86_64-unknown-linux-musl \
   && rm -rf /app/src
 
 COPY build.rs /app/

@@ -1,5 +1,8 @@
 #![warn(rust_2018_idioms)]
 
+#[global_allocator]
+static ALLOC: jemallocator::Jemalloc = jemallocator::Jemalloc;
+
 use async_std::{
     io::Error,
     prelude::*,
@@ -59,22 +62,14 @@ struct State {
 
 type GlobalState = Arc<RwLock<State>>;
 
-#[cfg(not(feature = "smol_runtime"))]
 #[async_std::main]
 async fn main() -> Result<(), std::io::Error> {
     inner_main().await
 }
 
-#[cfg(feature = "smol_runtime")]
-fn main() -> std::io::Result<()> {
-    smol::run(inner_main())
-}
-
 #[inline]
 async fn inner_main() -> std::io::Result<()> {
-    femme::ndjson::Logger::new()
-        .start(tide::log::Level::Info.to_level_filter())
-        .expect("logger issue");
+    femme::with_level(tide::log::Level::Info.to_level_filter());
     let global = Arc::new(RwLock::new(State {
         text: "no text".to_string(),
     }));

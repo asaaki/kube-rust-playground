@@ -1,11 +1,12 @@
 #![forbid(unsafe_code)]
 #![deny(warnings)]
 
+#[global_allocator]
+static ALLOC: jemallocator::Jemalloc = jemallocator::Jemalloc;
+
 use env::var;
 use std::{env, io::Error, net::SocketAddr};
 use tide::{Request, Response, Result as TideResult, StatusCode};
-
-// static APP_NAME: &str = env!("CARGO_PKG_NAME");
 
 static DEFAULT_PORT: &str = "8080";
 static DEFAULT_HOST: &str = "127.0.0.1";
@@ -43,15 +44,13 @@ async fn handler(req: Request<()>) -> TideResult {
     );
     let resp = Response::new(StatusCode::Ok)
         .body_string(body)
-        .set_header("content-type".parse().unwrap(), "text/html; charset=utf-8");
+        .set_mime(mime::TEXT_HTML_UTF_8);
     Ok(resp)
 }
 
 #[async_std::main]
 async fn main() -> Result<(), Error> {
-    femme::clean::Logger::new()
-        .start(tide::log::Level::Info.to_level_filter())
-        .expect("logger issue");
+    femme::with_level(tide::log::Level::Info.to_level_filter());
     let mut app = tide::new();
     app.at("/").get(handler);
     app.at("*").all(handler);

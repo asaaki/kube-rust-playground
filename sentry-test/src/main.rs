@@ -98,9 +98,9 @@ fn sentry_environment() -> String {
 }
 
 fn configure_dipstick() {
-    let mut targets = MultiOutput::new().named(APP_NAME);
+    let mut targets = MultiInput::new().named(APP_NAME);
 
-    targets = targets.add_target(Stream::to_stdout());
+    targets = targets.add_target(Stream::write_to_stdout());
 
     let prometheus = Prometheus::push_to("http://127.0.0.1:9091/metrics/job/dipstick_example")
         .expect("Prometheus socket issue");
