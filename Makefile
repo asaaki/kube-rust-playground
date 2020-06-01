@@ -1,5 +1,11 @@
 include shared.mk
 
+ifndef WIN_PWD
+CURRENT_PWD = $(PWD)
+else
+CURRENT_PWD = $(WIN_PWD)
+endif
+
 K3D_CLUSTER_CREATE_FLAGS = \
 	$(K3D_CLUSTER_FLAGS) \
 	--image "$(K3S_IMAGE)" \
@@ -10,6 +16,7 @@ K3D_CLUSTER_CREATE_FLAGS = \
 	--auto-restart \
 	--api-port=6550 \
 	--publish $(K3D_PUBLIC_HTTP_PORT):80 \
+	--volume $(CURRENT_PWD)/data/node:/data/node \
 	--workers 3
 
 K3D_CLUSTER_DELETE_FLAGS = \
@@ -18,6 +25,9 @@ K3D_CLUSTER_DELETE_FLAGS = \
 
 get-kubeconfig:
 	@$(K3D) get-kubeconfig --name=$(NAME)
+
+get-pwd:
+	@echo $(CURRENT_PWD)
 
 cluster:
 	$(K3D) --verbose create $(K3D_CLUSTER_CREATE_FLAGS)

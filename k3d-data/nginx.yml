@@ -58,3 +58,11 @@ spec:
         image: nginx:1.17.10
         ports:
         - containerPort: 80
+        volumeMounts:
+        - mountPath: /usr/share/nginx/html
+          name: html-files 
+      volumes:
+        - name: html-files
+          hostPath:
+            path: /data/node/nginx
+            type: Directory
