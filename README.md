@@ -45,3 +45,12 @@ make clean-cluster
 * <https://github.com/slack-rs/slack-rs>
 * <https://github.com/clux/rust-slack>
 * <https://github.com/mozilla/sccache/>
+* <https://fission.io/> - works quite well
+* <https://kubeless.io/> - http trigger / ingress not working
+* <https://istio.io/>
+* <https://fortio.org/>
+* <https://knative.dev/> - needs istio first, also very elaborate setup
+* <http://xip.io/> | <https://sslip.io/> | <https://nip.io/>
+* <https://helm.sh/>
+* <https://keel.sh/>
+* <https://garden.io/>
