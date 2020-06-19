@@ -23,5 +23,5 @@ async-std = { version = "1.6", features = ["attributes"] }
 tide = "0.11"
 lazy_static = "1.4"
 dipstick = "0.9"
-sentry = { version = "0.18", features = ["with_rustls", "with_curl_transport"] }
+sentry = { version = "0.19", features = ["with_rustls", "with_curl_transport"] }
 serde_json = "1.0"
