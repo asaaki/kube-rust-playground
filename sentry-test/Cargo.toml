@@ -20,7 +20,7 @@ path = "src/prom_pg_mock.rs"
 
 [dependencies]
 async-std = { version = "1.6", features = ["attributes"] }
-tide = "0.11"
+tide = "0.12"
 lazy_static = "1.4"
 dipstick = "0.9"
 sentry = { version = "0.19", features = ["with_rustls", "with_curl_transport"] }

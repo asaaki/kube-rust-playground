@@ -8,7 +8,7 @@ edition = "2018"
 
 [dependencies]
 jemallocator = "0.3"
-tide = "0.11"
+tide = "0.12"
 mime = "0.3"
 async-std = { version = "1.6", features = ["attributes"] }
 femme = "2.1"
