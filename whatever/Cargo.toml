@@ -12,7 +12,7 @@ arc-swap = "0.4"
 async-std = { version = "1.6", features = ["attributes"] }
 async-trait = "0.1"
 beef = "0.4"
-bollard = "0.7"
+bollard = "0.8"
 boondock = "0.1.0-alpha.1"
 bus_queue = "0.5"
 coercible_errors = "0.1"
