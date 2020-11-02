@@ -34,7 +34,7 @@ oorandom = "11.1"
 roperator = "0.2"
 serde = { version = "1.0", features = ["derive"]}
 serde_json = "1.0"
-sharded-slab = "0.0.9"
+sharded-slab = "0.1.0"
 shiplift = "0.6"
 simple-symbol = "3.0"
 tide = "0.14"
